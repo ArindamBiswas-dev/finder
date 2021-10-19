@@ -10,10 +10,7 @@ function Jobcard() {
       <div className="flex items-center">
         <div className="avatar">
           <div className="rounded-full w-10 h-10">
-            <img
-              alt="job"
-              src="http://daisyui.com/tailwind-css-component-profile-1@40w.png"
-            />
+            <img alt="job" src="https://bit.ly/dan-abramov" />
           </div>
         </div>
         <div className="pl-5">

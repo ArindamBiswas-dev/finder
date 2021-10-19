@@ -19,6 +19,9 @@ function FreeCourse() {
           <Coursecard />
           <Coursecard />
           <Coursecard />
+          <Coursecard />
+          <Coursecard />
+          <Coursecard />
         </div>
         <button class="btn btn-info mx-auto">View More</button>
       </div>

@@ -1,14 +1,16 @@
 import React, { useState } from 'react';
 import { MdAccountCircle } from 'react-icons/md';
 import { FaSignOutAlt } from 'react-icons/fa';
-import { VscNewFile } from 'react-icons/vsc';
+import { VscClose, VscMenu, VscNewFile } from 'react-icons/vsc';
 import Logo from './Logo';
 import { Link, useHistory } from 'react-router-dom';
 import { HiBookmark } from 'react-icons/hi';
+import { BsSearch } from 'react-icons/bs';
 
 function Navbar() {
   const history = useHistory();
   const [searchItem, setsearchItem] = useState('');
+  const [show, setShow] = useState(false);
 
   function search(e) {
     e.preventDefault();
@@ -20,6 +22,48 @@ function Navbar() {
 
   return (
     <div className="flex px-6 py-3 items-center shadow-md sticky top-0 z-50 bg-white">
+      <button
+        className="bg-gray-300 px-2 py-2 rounded-md mr-3 md:hidden"
+        onClick={() => setShow(!show)}
+      >
+        <VscMenu className="text-2xl" />
+      </button>
+
+      <div
+        className={`fixed top-0
+      bg-gray-300 h-screen pt-4 pl-4 z-50
+      ${
+        !show ? `-left-96 w-0` : 'left-0 w-full'
+      } transition-all duration-300 ease-in`}
+      >
+        <button
+          className="bg-red-500 px-2 py-2 rounded-md ml-4 mt-4"
+          onClick={() => setShow(!show)}
+        >
+          <VscClose className="text-2xl" />
+        </button>
+        <ul className="pr-4 mt-5">
+          <Link to="/freecourse">
+            <li
+              className="px-4 py-4 rounded-md hover:bg-gray-500 
+            hover:text-gray-100 cursor-pointer 
+            transition-all duration-300 ease-in-out"
+            >
+              Free Course
+            </li>
+          </Link>
+          <Link to="/job-internship">
+            <li
+              className="px-4 py-4 rounded-md hover:bg-gray-500 
+            hover:text-gray-100 cursor-pointer 
+            transition-all duration-300 ease-in-out"
+            >
+              Job / Internship
+            </li>
+          </Link>
+        </ul>
+      </div>
+
       <Logo />
       <div className="items-center mx-auto hidden sm:flex">
         <form onSubmit={search}>
@@ -33,6 +77,7 @@ function Navbar() {
           </div>
         </form>
       </div>
+      {/* if log in then show */}
       <div className="ml-auto md:m-0 hidden">
         <button className="btn btn-sm md:btn-md btn-outline btn-info mx-2">
           Sign Up
@@ -44,13 +89,27 @@ function Navbar() {
           Log In
         </button>
       </div>
-      <div className="dropdown dropdown-hover dropdown-end ml-auto md:ml-0">
-        <div className="avatar">
-          <div className="rounded-full w-10 h-10 cursor-pointer ring ring-blue-500 ring-offset-base-100 ring-offset-2">
-            <img
-              alt="avater"
-              src="http://daisyui.com/tailwind-css-component-profile-1@56w.png"
-            />
+
+      {/* Search btn for mobile */}
+      <div className="ml-auto md:hidden">
+        <Link to="/search?mob=true">
+          <button
+            className={`btn btn-circle btn-outline btn-md hover:bg-gray-50  
+          mr-5 mb-1 hover:text-black`}
+          >
+            <BsSearch className="text-base" />
+          </button>
+        </Link>
+      </div>
+      {/* Search btn for mobile */}
+
+      <div className="dropdown dropdown-hover dropdown-end">
+        <div className="avatar z-20">
+          <div
+            className="rounded-full w-10 h-10 cursor-pointer 
+          ring ring-blue-500 ring-offset-base-100 ring-offset-2"
+          >
+            <img alt="avater" src="https://bit.ly/dan-abramov" />
           </div>
         </div>
         <ul

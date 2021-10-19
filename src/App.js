@@ -9,7 +9,7 @@ import Newpost from './pages/newpost';
 import Singlecoursepost from './pages/singlecoursepost';
 import Search from './pages/search';
 import Home from './pages/home';
-// import Test from './pages/test';
+import Bookmarks from './pages/bookmarks';
 
 function App() {
   return (
@@ -42,9 +42,9 @@ function App() {
         <Route exact path="/search">
           <Search />
         </Route>
-        {/* <Route exact path="/test">
-          <Test />
-        </Route> */}
+        <Route exact path="/bookmarked">
+          <Bookmarks />
+        </Route>
       </Switch>
     </Router>
   );

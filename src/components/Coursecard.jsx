@@ -19,10 +19,7 @@ function Coursecard() {
         <Link to="/freecourse/new-react-course-142wj">
           <div className="avatar">
             <div className="rounded-full w-10 h-10">
-              <img
-                alt="course"
-                src="http://daisyui.com/tailwind-css-component-profile-1@40w.png"
-              />
+              <img alt="course" src="https://bit.ly/dan-abramov" />
             </div>
           </div>
         </Link>

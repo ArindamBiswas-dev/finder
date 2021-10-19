@@ -1,7 +1,7 @@
 import React from 'react';
 import CourseCardSmall from './CourseCardSmall';
 
-function SmallCardContainer({ isFreecourseActive }) {
+function SmallCardContainer({ isFreecourseActive, withInBookmarked = false }) {
   //* isFreecourseActive === true => fetch for course
   //* else => fetch for j/i
 
@@ -9,14 +9,14 @@ function SmallCardContainer({ isFreecourseActive }) {
     <div className="mt-10 space-y-4">
       {isFreecourseActive && (
         <>
-          <CourseCardSmall />
-          <CourseCardSmall />
+          <CourseCardSmall withInBookmarked={withInBookmarked} />
+          <CourseCardSmall withInBookmarked={withInBookmarked} />
         </>
       )}
       {!isFreecourseActive && (
         <>
-          <CourseCardSmall />
-          <CourseCardSmall />
+          <CourseCardSmall withInBookmarked={withInBookmarked} />
+          <CourseCardSmall withInBookmarked={withInBookmarked} />
         </>
       )}
     </div>
