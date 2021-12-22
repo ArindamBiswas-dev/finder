@@ -79,7 +79,7 @@ function JobInternship() {
           <button
             class={`btn btn-info mx-auto ${
               isFetchingNextPage ? 'loading' : ''
-            }`}
+            } ${!hasNextPage ? 'hidden' : 'block'}`}
             disabled={!hasNextPage}
             onClick={fetchNextPage}
           >
