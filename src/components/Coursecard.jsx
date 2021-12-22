@@ -1,14 +1,51 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { BsFillBookmarksFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
+import { UserContext } from '../App';
+import { useAddToBookmark } from '../hooks/useAddToBookmark';
+import { useCheckIfBookmarkedCourse } from '../hooks/useCheckIfBookmarkedCourse';
+import { useRemoveBookmark } from '../hooks/useRemoveBookmark';
+import { getFormatedDate } from '../util/getFormatedDate';
 
-function Coursecard() {
+function Coursecard({
+  author,
+  date,
+  title,
+  description,
+  slug,
+  userId,
+  courseId,
+}) {
   const [bookmarked, setbookmarked] = useState(false);
+  const user = useContext(UserContext);
+  const { mutate: addBookmark } = useAddToBookmark();
+  const { mutate: removeBookmark } = useRemoveBookmark();
 
   const addToBookmark = () => {
-    console.log('bookmark added');
-    setbookmarked(!bookmarked);
+    if (!user) return;
+    const h = { itemId: courseId, userId: user, topic: 'course' };
+    if (!bookmarked) {
+      console.log('add from bookmark');
+      addBookmark(h);
+      setbookmarked(true);
+    } else {
+      console.log('bookmark removed');
+      removeBookmark(h);
+      setbookmarked(false);
+    }
   };
+
+  const formatedDate = getFormatedDate(date);
+  useCheckIfBookmarkedCourse(user, setbookmarked, courseId);
+
+  // if (data?.data) console.log(data.data);
+
+  // useEffect(() => {
+  //   if (data?.data?.id) {
+  //     console.log('use');
+  //     setbookmarked(true);
+  //   }
+  // }, [bookmarked]);
 
   return (
     <div
@@ -16,17 +53,17 @@ function Coursecard() {
         hover:shadow-xl transition duration-200 ease-in-out cursor-pointer"
     >
       <div className="flex items-center">
-        <Link to="/freecourse/new-react-course-142wj">
+        <Link to={`/freecourse/${slug}`}>
           <div className="avatar">
             <div className="rounded-full w-10 h-10">
               <img alt="course" src="https://bit.ly/dan-abramov" />
             </div>
           </div>
         </Link>
-        <Link to="/freecourse/new-react-course-142wj">
+        <Link to={`/freecourse/${slug}`}>
           <div className="pl-5">
-            <h1 className="font-semibold text-sm">Anupam Das</h1>
-            <p className="text-xs">May 29, 2021</p>
+            <h1 className="font-semibold text-sm">{author}</h1>
+            <p className="text-xs">{formatedDate}</p>
           </div>
         </Link>
         <button
@@ -37,21 +74,18 @@ function Coursecard() {
                  : `border-gray-700 hover:border-gray-700`
              }`}
           onClick={addToBookmark}
+          disabled={!user ? true : false}
         >
           <BsFillBookmarksFill
             className={`${bookmarked ? `text-blue-500` : `text-gray-700`}`}
           />
         </button>
       </div>
-      <Link to="/freecourse/new-react-course-142wj">
+      <Link to={`/freecourse/${slug}`}>
         <div className="pt-4">
-          <h1 className="font-bold text-base">What is Lorem Ipsum?</h1>
+          <h1 className="font-bold text-base">{title}</h1>
           <p className="pt-2 text-justify text-sm text-gray-600">
-            It is a long established fact that a reader will be distracted by
-            the readable content of a page when looking at its layout. The point
-            of using Lorem Ipsum isIt is a long established fact that a reader
-            will be distracted by the readable content of a page when looking at
-            its layout. The point of using Lorem Ipsum.
+            {description}
           </p>
         </div>
       </Link>

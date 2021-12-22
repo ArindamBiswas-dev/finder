@@ -1,9 +1,12 @@
-import React from 'react';
+import axios from 'axios';
+import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Logo from '../components/Logo';
 
 function Signup() {
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -12,8 +15,24 @@ function Signup() {
 
   // console.log(errors);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log(data);
+    try {
+      setLoading(true);
+      const res = await axios.post('http://localhost:5000/auth/register', data);
+      console.log(res);
+      toast.success('Sign Up successful');
+      toast.success('Verify your email');
+    } catch (error) {
+      const errorMessage =
+        error.response.status === 409
+          ? 'This email is already registered'
+          : 'Internal Server Error';
+      toast.error(errorMessage);
+      console.log(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -92,9 +111,11 @@ function Signup() {
                 </div>
                 <button
                   type="submit"
-                  className="btn btn-info btn-md mb-5 mt-12"
+                  className={`btn btn-info btn-md mb-5 mt-12 ${
+                    loading ? 'loading' : ''
+                  }`}
                 >
-                  Sign Up
+                  {loading ? 'Signing Up' : 'Sign Up'}
                 </button>
               </form>
 

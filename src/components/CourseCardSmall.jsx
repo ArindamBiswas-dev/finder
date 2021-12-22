@@ -2,7 +2,14 @@ import React from 'react';
 import { MdDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
 
-function CourseCardSmall({ withInBookmarked = false }) {
+function CourseCardSmall({
+  withInBookmarked = false,
+  title,
+  avatar,
+  date,
+  author,
+  slug,
+}) {
   return (
     <div>
       <div
@@ -16,7 +23,7 @@ function CourseCardSmall({ withInBookmarked = false }) {
             </div>
           </div>
           <div className="pl-5 text-gray-900">
-            <h1 className="font-semibold text-sm">Anupam Das</h1>
+            <h1 className="font-semibold text-sm">{author}</h1>
             <p className="text-xs">May 29, 2021</p>
           </div>
           {withInBookmarked && (
@@ -28,9 +35,9 @@ function CourseCardSmall({ withInBookmarked = false }) {
             </button>
           )}
         </div>
-        <Link to="#">
+        <Link to={`/freecourse/${slug}`}>
           <h1 className="mt-2 font-medium text-xl ml-14 pl-1 hover:text-blue-500">
-            React course 101 for Beginners
+            {title}
           </h1>
         </Link>
       </div>

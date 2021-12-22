@@ -7,22 +7,21 @@ import { UserContext } from '../App';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { useAddToBookmark } from '../hooks/useAddToBookmark';
-import { useCheckIfBookmarkedCourse } from '../hooks/useCheckIfBookmarkedCourse';
+import { useCheckIfBookmarkedJI } from '../hooks/useCheckIfBookmarkedJI';
 import { useRemoveBookmark } from '../hooks/useRemoveBookmark';
 import { axiosInstance } from '../util/axiosInstance';
 import { getFormatedDate } from '../util/getFormatedDate';
 import { Editor } from 'react-draft-wysiwyg';
 import { convertFromRaw, EditorState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
-import { Rating } from '../components/Rating';
 
-const fetchCourse = async ({ queryKey }) => {
+const fetchJI = async ({ queryKey }) => {
   const slug = queryKey[1];
   console.log(slug);
-  return await axiosInstance.get(`/api/getsinglecourse/${slug}`);
+  return await axiosInstance.get(`/api/getsingleji/${slug}`);
 };
 
-function Singlecoursepost() {
+export const Singljipost = () => {
   const { id } = useParams();
   const [bookmarked, setbookmarked] = useState(false);
   const [bookmarkEnable, setbookmarkedEnable] = useState(false);
@@ -31,34 +30,30 @@ function Singlecoursepost() {
   const { mutate: addBookmark } = useAddToBookmark();
   const { mutate: removeBookmark } = useRemoveBookmark();
 
-  const { isLoading, data, error } = useQuery(
-    ['single-course', id],
-    fetchCourse,
-    {
-      onSuccess: (data) => {
-        setbookmarkedEnable(true);
-      },
-    }
-  );
-  useCheckIfBookmarkedCourse(
-    user,
-    setbookmarked,
-    data?.data?.id,
-    bookmarkEnable
-  );
+  const { isLoading, data, error } = useQuery(['single-ji', id], fetchJI, {
+    onSuccess: (data) => {
+      console.log(data.data);
+      setbookmarkedEnable(true);
+    },
+  });
 
-  let formatedDate = null;
+  let postDate = null;
+  let startDate = null;
+  let endDate = null;
+
   if (data?.data) {
-    console.log(data.data.id);
-    formatedDate = getFormatedDate(data.data.last_edit);
+    postDate = getFormatedDate(data.data.last_edit);
+    startDate = getFormatedDate(data.data.start_date);
+    endDate = getFormatedDate(data.data.end_date);
   }
+
+  useCheckIfBookmarkedJI(user, setbookmarked, data?.data?.id, bookmarkEnable);
 
   const addToBookmark = () => {
     if (!user) return;
-    const h = { itemId: data.data.id, userId: user, topic: 'course' };
+    const h = { itemId: data?.data?.id, user: user, topic: 'ji' };
     if (!bookmarked) {
       console.log('add from bookmark');
-      // console.log(h);
       addBookmark(h);
       setbookmarked(true);
     } else {
@@ -101,8 +96,8 @@ function Singlecoursepost() {
                 />
               </button>
             </div>
-            <div className="flex items-start md:items-center mb-3 md:mb-14">
-              <Link to={`/profile/${data.data.username}`}>
+            <div className="flex items-start md:items-center mb-3 md:mb-5">
+              <Link to="/profile/@anupamdas35">
                 <div className="avatar">
                   <div className="rounded-full w-12 h-12 md:w-16 md:h-16">
                     <img alt="avater" src="https://bit.ly/dan-abramov" />
@@ -114,15 +109,19 @@ function Singlecoursepost() {
                   <h1 className="font-medium md:text-lg">
                     {data.data.full_name}
                   </h1>
-                  <p className="text-sm">{formatedDate}</p>
+                  <p className="text-sm">{postDate}</p>
                 </div>
               </Link>
             </div>
-            <div className="mb-8">
-              <h3 className="md:text-xl font-semibold mb-2 text-gray-600">
-                Rating
-              </h3>
-              <Rating rating={data.data.rating} edit={false} />
+            <div className="my-3 flex gap-3 justify-between mb-10">
+              <div className="p-4 bg-green-200 w-full rounded-md">
+                <h3 className="mb-1 font-semibold">Start Date</h3>
+                <h3 className="md:text-xl font-bold">{startDate}</h3>
+              </div>
+              <div className="p-4 bg-red-200 w-full rounded-md">
+                <h3 className="mb-1 font-semibold">End Date</h3>
+                <h3 className="md:text-xl font-bold">{endDate}</h3>
+              </div>
             </div>
             {/* <p className="text-sm md:text-base">{data.data.description}</p> */}
             <Editor
@@ -133,7 +132,7 @@ function Singlecoursepost() {
               )}
             />
             <strong className="my-4 text-sm md:text-base">
-              Course link :{' '}
+              Job link :{' '}
               <a href="#course_link" className="text-blue-400">
                 https://google.com
               </a>
@@ -144,6 +143,4 @@ function Singlecoursepost() {
       {error && <div>{error.message}</div>}
     </div>
   );
-}
-
-export default Singlecoursepost;
+};

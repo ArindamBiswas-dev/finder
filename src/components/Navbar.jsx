@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { MdAccountCircle } from 'react-icons/md';
 import { FaSignOutAlt } from 'react-icons/fa';
 import { VscClose, VscMenu, VscNewFile } from 'react-icons/vsc';
@@ -6,11 +6,13 @@ import Logo from './Logo';
 import { Link, useHistory } from 'react-router-dom';
 import { HiBookmark } from 'react-icons/hi';
 import { BsSearch } from 'react-icons/bs';
+import { UserNameContext } from '../App';
 
 function Navbar() {
   const history = useHistory();
   const [searchItem, setsearchItem] = useState('');
   const [show, setShow] = useState(false);
+  const { username } = useContext(UserNameContext);
 
   function search(e) {
     e.preventDefault();
@@ -119,7 +121,7 @@ function Navbar() {
         >
           <li>
             <Link
-              to="/profile/@sumanrana"
+              to={`/profile/${username}`}
               className="text-sm flex items-center"
             >
               <MdAccountCircle size="22px" />
@@ -139,7 +141,7 @@ function Navbar() {
             </Link>
           </li>
           <li>
-            <Link to="/profile" className="text-sm flex items-center">
+            <Link to="/logout" className="text-sm flex items-center">
               <FaSignOutAlt size="20px" className="ml-1" />
               <p className="pl-2">Log Out</p>
             </Link>

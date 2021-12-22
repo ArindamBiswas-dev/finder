@@ -3,25 +3,50 @@ import { Redirect } from 'react-router-dom';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import SmallCardContainer from '../components/SmallCardContainer';
-import useQuery from '../hooks/useQuery';
+import useURLQuery from '../hooks/useQuery';
 import { useHistory } from 'react-router-dom';
+import { axiosInstance } from '../util/axiosInstance';
+import { useQuery } from 'react-query';
+import { ClipLoader } from 'react-spinners';
+
+const fetchSearchCourse = async ({ queryKey }) => {
+  const searchItem = queryKey[1];
+  return await axiosInstance.get(`/api/searchcourse?q=${searchItem}`);
+};
+const fetchSearchJI = async ({ queryKey }) => {
+  const searchItem = queryKey[1];
+  return await axiosInstance.get(`/api/searchji?q=${searchItem}`);
+};
 
 function Search() {
-  const query = useQuery();
+  const query = useURLQuery();
   const history = useHistory();
   const searchItem = query.get('search_query');
   const viewOnMobile = query.get('mob');
   const [active, setactive] = useState(true);
-
   const [searchItemMobile, setsearchItemMobile] = useState('');
 
   function search(e) {
     e.preventDefault();
-
     if (!searchItemMobile) return;
-
     return history.push(`/search?search_query=${searchItemMobile}`);
   }
+
+  const {
+    data: courses,
+    isLoading,
+    error,
+  } = useQuery(['search-courses', searchItem], fetchSearchCourse, {
+    enabled: active,
+  });
+
+  const {
+    data: jis,
+    isLoading: isJILoading,
+    error: jiError,
+  } = useQuery(['search-jis', searchItem], fetchSearchJI, {
+    enabled: !active,
+  });
 
   if (!searchItem && !viewOnMobile) {
     return <Redirect to="/freecourse" />;
@@ -70,10 +95,27 @@ function Search() {
           </div>
 
           {/* search results */}
+          {(isLoading || isJILoading) && (
+            <div className="flex justify-center items-center h-full md:pt-20">
+              <ClipLoader loading={isLoading || isJILoading} size={50} />
+            </div>
+          )}
 
-          {active && <SmallCardContainer isFreecourseActive={active} />}
+          {active && courses && (
+            <SmallCardContainer
+              isFreecourseActive={active}
+              searchItem={searchItem}
+              courses={courses}
+            />
+          )}
 
-          {!active && <SmallCardContainer isFreecourseActive={active} />}
+          {!active && jis && (
+            <SmallCardContainer
+              isFreecourseActive={active}
+              searchItem={searchItem}
+              jis={jis}
+            />
+          )}
         </div>
       </div>
     </div>

@@ -1,17 +1,54 @@
 import React from 'react';
+import { useContext } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
+import { useHistory } from 'react-router-dom';
+import { SetUserContext } from '../App';
 import Logo from '../components/Logo';
+import { axiosInstance } from '../util/axiosInstance';
 
 function Signin() {
+  const history = useHistory();
+  const setUser = useContext(SetUserContext);
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => {
-    console.log(data);
+  const onSubmit = async (data) => {
+    // console.log(data);
+    try {
+      setLoading(true);
+      const res = await axiosInstance.post('/auth/login', data);
+      setUser(res.data.user.id);
+      console.log(res.data.user.id);
+      toast.success('Sign In successful');
+      setTimeout(() => {
+        return history.push('/freecourse');
+      }, 3000);
+    } catch (error) {
+      let errorMessage = '';
+
+      switch (error.response.status) {
+        case 406:
+          errorMessage = 'This email is not verified';
+          break;
+        case 401:
+          errorMessage = 'Email / Password is wrong';
+          break;
+        default:
+          errorMessage = 'Internal Server Error';
+      }
+
+      toast.error(errorMessage);
+      console.log(errorMessage);
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -66,8 +103,11 @@ function Signin() {
                     Reset it
                   </a>
                 </div>
-                <button type="submit" className="btn btn-info btn-md mb-5">
-                  Sign In
+                <button
+                  type="submit"
+                  className={`btn btn-info btn-md mb-5 ${loading && 'loading'}`}
+                >
+                  {loading ? 'Signing In' : 'Sign In'}
                 </button>
               </form>
 

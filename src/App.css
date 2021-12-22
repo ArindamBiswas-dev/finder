@@ -1,3 +1,10 @@
 .react-datepicker-popper {
   z-index: 100 !important;
 }
+
+.toolbar-class {
+  display: none !important;
+}
+.rdw-editor-main {
+  height: auto !important;
+}

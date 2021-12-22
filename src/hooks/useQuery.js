@@ -3,8 +3,8 @@
 import { useLocation } from 'react-router';
 
 // the query string for you.
-function useQuery() {
+function useURLQuery() {
   return new URLSearchParams(useLocation().search);
 }
 
-export default useQuery;
+export default useURLQuery;
