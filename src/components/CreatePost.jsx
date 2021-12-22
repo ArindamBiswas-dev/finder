@@ -18,6 +18,7 @@ function CreatePost() {
   const [endDate, setEndDate] = useState();
   const [title, setTitle] = useState();
   const [rating, setRating] = useState(null);
+  const [link, setLink] = useState('');
   const user = useContext(UserContext);
   const { mutate: createJIPost, isLoading: jiLoading } = useCreateJIPost();
   const { mutate: createCoursePost, isLoading: courseLoading } =
@@ -37,6 +38,7 @@ function CreatePost() {
           description: convertToRaw(editorState.getCurrentContent()),
           rating: rating,
           userId: user,
+          link,
         };
         console.log(formData);
         createCoursePost(formData);
@@ -48,6 +50,7 @@ function CreatePost() {
           title,
           description: convertToRaw(editorState.getCurrentContent()),
           userId: user,
+          link,
           startDate,
           endDate,
         };
@@ -100,6 +103,23 @@ function CreatePost() {
               <Rating setRating={setRating} rating={rating} />
             </div>
           )}
+          <div className="form-control mb-8">
+            <label className="label">
+              <span className="label-text text-base font-semibold text-gray-600">
+                Link of the{' '}
+                {typeOfPost !== 'ji' ? 'Course' : 'Job / Internship'}
+              </span>
+            </label>
+            <input
+              type="text"
+              placeholder={`Link of the ${
+                typeOfPost !== 'ji' ? 'Course' : 'Job / Internship'
+              }`}
+              className="input input-lg input-info input-bordered font-semibold text-xl"
+              onChange={(e) => setLink(e.target.value)}
+              required
+            />
+          </div>
           {typeOfPost.length > 0 && typeOfPost === 'ji' && (
             <div className="flex mb-4 space-x-3">
               <div className="font-semibold p-1">

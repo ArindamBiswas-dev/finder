@@ -132,12 +132,14 @@ function Singlecoursepost() {
                 convertFromRaw(JSON.parse(data.data.description))
               )}
             />
-            <strong className="my-4 text-sm md:text-base">
-              Course link :{' '}
-              <a href="#course_link" className="text-blue-400">
-                https://google.com
-              </a>
-            </strong>
+            <a
+              href={data.data.course_link}
+              target="_blank"
+              rel="noreferrer"
+              className="bg-blue-700 w-40 text-center py-3 text-white font-medium rounded-md tracking-wide mt-10"
+            >
+              Visit Course
+            </a>
           </div>
         </div>
       )}

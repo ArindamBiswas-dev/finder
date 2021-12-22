@@ -7,11 +7,13 @@ const createJIPost = async ({
   userId,
   startDate,
   endDate,
+  link,
 }) => {
   const formData = {
     title,
     description,
     userId,
+    link,
     startDate,
     endDate,
   };
