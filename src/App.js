@@ -12,8 +12,7 @@ import Search from './pages/search';
 import Home from './pages/home';
 import Bookmarks from './pages/bookmarks';
 import { ToastContainer } from 'react-toastify';
-import { useState } from 'react';
-import { useQuery } from 'react-query';
+import { useState } from 'react'; // hello
 
 import 'react-toastify/dist/ReactToastify.css';
 import { ProtectedWhenLogin } from './components/ProtectedWhenLogin';

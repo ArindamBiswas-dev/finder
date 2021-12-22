@@ -44,23 +44,19 @@ function Jobcard({
 
   return (
     <div
-      className="p-6 rounded-2xl border border-gray-400 bg-gray-100 min-w-32
-    hover:shadow-xl transition duration-200 ease-in-out cursor-pointer"
+      className="p-6 rounded-2xl shadow-md border bg-gray-100 min-w-32
+      hover:shadow-xl transition duration-300 ease-in-out flex flex-col hover:border-blue-500"
     >
       <div className="flex items-center">
-        <Link to={`/job-internship/${slug}`}>
-          <div className="avatar">
-            <div className="rounded-full w-10 h-10">
-              <img alt="job" src="https://bit.ly/dan-abramov" />
-            </div>
+        <div className="avatar">
+          <div className="rounded-full w-10 h-10">
+            <img alt="job" src="https://bit.ly/dan-abramov" />
           </div>
-        </Link>
-        <Link to={`/job-internship/${slug}`}>
-          <div className="pl-5">
-            <h1 className="font-semibold text-sm">{author}</h1>
-            <p className="text-xs">{formatedPostDate}</p>
-          </div>
-        </Link>
+        </div>
+        <div className="pl-5">
+          <h1 className="font-semibold text-sm">{author}</h1>
+          <p className="text-xs">{formatedPostDate}</p>
+        </div>
         <button
           className={`btn btn-outline btn-circle btn-sm ml-auto hover:bg-gray-50 
              ${
@@ -77,34 +73,34 @@ function Jobcard({
         </button>
       </div>
 
-      <Link to={`/job-internship/${slug}`}>
-        <div className="pt-4">
-          <h1 className="font-bold text-base">{title}</h1>
-          <p className="pt-2 text-justify text-sm text-gray-600">
-            {description}
-          </p>
-        </div>
-        <div className="flex pt-8">
-          <div>
-            <div className="flex items-center">
-              <div className="h-4 w-4 bg-green-400 rounded-md" />
-              <p className="pl-2 text-sm">Start Date</p>
-            </div>
-            <div className="p-1 bg-gray-300 text-center rounded-md mt-2 text-sm">
-              {formatedStartDate}
-            </div>
+      <h1 className="font-semibold text-lg mt-4 tracking-wide">{title}</h1>
+      <div className="flex pt-7">
+        <div>
+          <div className="flex items-center">
+            <div className="h-4 w-4 bg-green-400 rounded-md" />
+            <p className="pl-2 text-sm">Start Date</p>
           </div>
-          <div className="ml-auto">
-            <div className="flex items-center">
-              <div className="h-4 w-4 bg-red-400 rounded-md" />
-              <p className="pl-2 text-sm">End Date</p>
-            </div>
-            <div className="p-1 bg-gray-300 text-center rounded-md mt-2 text-sm">
-              {formatedEndDate}
-            </div>
+          <div className="p-1 bg-gray-200 text-center rounded-md mt-2 text-sm">
+            {formatedStartDate}
           </div>
         </div>
-      </Link>
+        <div className="ml-auto">
+          <div className="flex items-center">
+            <div className="h-4 w-4 bg-red-400 rounded-md" />
+            <p className="pl-2 text-sm">End Date</p>
+          </div>
+          <div className="p-1 bg-gray-200 text-center rounded-md mt-2 text-sm">
+            {formatedEndDate}
+          </div>
+        </div>
+      </div>
+      <div className="mt-5">
+        <Link to={`/job-internship/${slug}`}>
+          <button className="w-full py-2 bg-gray-300 rounded-lg text-sm font-semibold tracking-wide">
+            View Details
+          </button>
+        </Link>
+      </div>
     </div>
   );
 }
