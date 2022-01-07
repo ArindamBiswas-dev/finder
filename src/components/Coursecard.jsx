@@ -1,29 +1,25 @@
 import React, { useContext, useState } from 'react';
 import { BsFillBookmarksFill } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
-import { UserContext } from '../App';
+import { AuthContext } from '../Auth/AuthContext';
+// import { UserContext } from '../App';
 import { useAddToBookmark } from '../hooks/useAddToBookmark';
 import { useCheckIfBookmarkedCourse } from '../hooks/useCheckIfBookmarkedCourse';
 import { useRemoveBookmark } from '../hooks/useRemoveBookmark';
 import { getFormatedDate } from '../util/getFormatedDate';
 
-function Coursecard({
-  author,
-  date,
-  title,
-  description,
-  slug,
-  userId,
-  courseId,
-}) {
+function Coursecard({ author, date, title, description, slug, courseId }) {
   const [bookmarked, setbookmarked] = useState(false);
-  const user = useContext(UserContext);
+  // const user = useContext(UserContext);
+  const authContext = useContext(AuthContext);
+  const userId = authContext.authState.userInfo.id;
+  const isAuthenticated = authContext.isAuthenticated();
   const { mutate: addBookmark } = useAddToBookmark();
   const { mutate: removeBookmark } = useRemoveBookmark();
 
   const addToBookmark = () => {
-    if (!user) return;
-    const h = { itemId: courseId, userId: user, topic: 'course' };
+    if (!userId) return;
+    const h = { itemId: courseId, userId: userId, topic: 'course' };
     if (!bookmarked) {
       console.log('add from bookmark');
       addBookmark(h);
@@ -36,7 +32,7 @@ function Coursecard({
   };
 
   const formatedDate = getFormatedDate(date);
-  useCheckIfBookmarkedCourse(user, setbookmarked, courseId);
+  useCheckIfBookmarkedCourse(userId, setbookmarked, courseId);
 
   // if (data?.data) console.log(data.data);
 
@@ -72,7 +68,7 @@ function Coursecard({
                  : `border-gray-700 hover:border-gray-700`
              }`}
           onClick={addToBookmark}
-          disabled={!user ? true : false}
+          disabled={!isAuthenticated}
         >
           <BsFillBookmarksFill
             className={`${bookmarked ? `text-blue-500` : `text-gray-700`}`}

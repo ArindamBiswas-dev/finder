@@ -3,7 +3,8 @@ import { useQuery } from 'react-query';
 import { useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
 import { toast } from 'react-toastify';
-import { UserContext } from '../App';
+import { AuthContext } from '../Auth/AuthContext';
+// import { UserContext } from '../App';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { useUpdateProfile } from '../hooks/useUpdateProfile';
@@ -16,7 +17,9 @@ const fetchUser = ({ queryKey }) => {
 
 function Profile() {
   const { id } = useParams();
-  const user = useContext(UserContext);
+  // const user = useContext(UserContext);
+  const authContext = useContext(AuthContext);
+  const userId = authContext.authState.userInfo.id;
   const [name, setName] = useState('');
   const [username, setUserName] = useState('');
   const [bio, setBio] = useState('');
@@ -82,7 +85,7 @@ function Profile() {
                 </div>
               </div>
 
-              {data.data.id === user && (
+              {data.data.id === userId && (
                 <a
                   href="#my-modal"
                   className="btn btn-info ml-auto mt-4 mr-2 md:mt-8 md:mr-6 btn-sm"
@@ -92,7 +95,7 @@ function Profile() {
               )}
             </div>
 
-            {data.data.id === user && (
+            {data.data.id === userId && (
               <div id="my-modal" className="modal md:pl-28 overflow-y-scroll">
                 <div className="modal-box">
                   <form>

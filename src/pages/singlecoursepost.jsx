@@ -3,7 +3,7 @@ import { BsFillBookmarksFill } from 'react-icons/bs';
 import { useQuery } from 'react-query';
 import { Link, useParams } from 'react-router-dom';
 import { ClipLoader } from 'react-spinners';
-import { UserContext } from '../App';
+// import { UserContext } from '../App';
 import Navbar from '../components/Navbar';
 import Sidebar from '../components/Sidebar';
 import { useAddToBookmark } from '../hooks/useAddToBookmark';
@@ -15,6 +15,7 @@ import { Editor } from 'react-draft-wysiwyg';
 import { convertFromRaw, EditorState } from 'draft-js';
 import 'react-draft-wysiwyg/dist/react-draft-wysiwyg.css';
 import { Rating } from '../components/Rating';
+import { AuthContext } from '../Auth/AuthContext';
 
 const fetchCourse = async ({ queryKey }) => {
   const slug = queryKey[1];
@@ -26,7 +27,10 @@ function Singlecoursepost() {
   const { id } = useParams();
   const [bookmarked, setbookmarked] = useState(false);
   const [bookmarkEnable, setbookmarkedEnable] = useState(false);
-  const user = useContext(UserContext);
+  // const user = useContext(UserContext);
+  const authContext = useContext(AuthContext);
+  const userId = authContext.authState.userInfo.id;
+  const isAuthenticated = authContext.isAuthenticated();
 
   const { mutate: addBookmark } = useAddToBookmark();
   const { mutate: removeBookmark } = useRemoveBookmark();
@@ -41,7 +45,7 @@ function Singlecoursepost() {
     }
   );
   useCheckIfBookmarkedCourse(
-    user,
+    userId,
     setbookmarked,
     data?.data?.id,
     bookmarkEnable
@@ -54,8 +58,8 @@ function Singlecoursepost() {
   }
 
   const addToBookmark = () => {
-    if (!user) return;
-    const h = { itemId: data.data.id, userId: user, topic: 'course' };
+    if (!userId) return;
+    const h = { itemId: data.data.id, userId: userId, topic: 'course' };
     if (!bookmarked) {
       console.log('add from bookmark');
       // console.log(h);
@@ -92,7 +96,7 @@ function Singlecoursepost() {
                  : `border-gray-700 hover:border-gray-700`
              }`}
                 onClick={addToBookmark}
-                disabled={!user ? true : false}
+                disabled={!isAuthenticated}
               >
                 <BsFillBookmarksFill
                   className={`${

@@ -1,23 +1,26 @@
 import React from 'react';
 import { useContext } from 'react';
 import { Redirect, Route } from 'react-router';
-import { UserContext } from '../App';
+import { AuthContext } from '../Auth/AuthContext';
+// import { UserContext } from '../App';
 
-export const ProtectedWhenLogin = ({ user, component: Component, ...rest }) => {
+export const ProtectedWhenLogin = ({ component: Component, ...rest }) => {
   // const user = useContext(UserContext);
+  const authContext = useContext(AuthContext);
+  const isAuthenticated = authContext.isAuthenticated();
   console.log('protectedLogin');
 
   return (
     <Route
       {...rest}
       render={(props) => {
-        if (user)
+        if (isAuthenticated)
           return (
             <Redirect
               to={{ pathname: '/freecourse', state: { from: props.location } }}
             />
           );
-        if (!user) return <Component {...props} />;
+        return <Component {...props} />;
       }}
     />
   );

@@ -5,14 +5,16 @@ import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { useHistory } from 'react-router-dom';
-import { SetUserContext } from '../App';
+// import { SetUserContext } from '../App';
 import Logo from '../components/Logo';
 import { axiosInstance } from '../util/axiosInstance';
+import { AuthContext } from '../Auth/AuthContext';
 
 function Signin() {
   const history = useHistory();
-  const setUser = useContext(SetUserContext);
+  // const setUser = useContext(SetUserContext);
   const [loading, setLoading] = useState(false);
+  const authContext = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -23,17 +25,22 @@ function Signin() {
     // console.log(data);
     try {
       setLoading(true);
-      const res = await axiosInstance.post('/auth/login', data);
-      setUser(res.data.user.id);
-      console.log(res.data.user.id);
+      const { data: res } = await axiosInstance.post('/auth/login', data);
+      // setUser(res.data.user.id);
+      // console.log(res);
       toast.success('Sign In successful');
       setTimeout(() => {
-        return history.push('/freecourse');
+        authContext.setAuthState({
+          token: res.token,
+          userInfo: res.user,
+        });
+        history.push('/freecourse');
       }, 3000);
     } catch (error) {
+      console.log(error.message);
       let errorMessage = '';
 
-      switch (error.response.status) {
+      switch (error?.response?.status) {
         case 406:
           errorMessage = 'This email is not verified';
           break;

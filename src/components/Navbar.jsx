@@ -6,13 +6,18 @@ import Logo from './Logo';
 import { Link, useHistory } from 'react-router-dom';
 import { HiBookmark } from 'react-icons/hi';
 import { BsSearch } from 'react-icons/bs';
-import { UserNameContext } from '../App';
+import { AuthContext } from '../Auth/AuthContext';
+// import { UserNameContext } from '../App';
 
 function Navbar() {
   const history = useHistory();
   const [searchItem, setsearchItem] = useState('');
   const [show, setShow] = useState(false);
-  const { username } = useContext(UserNameContext);
+  // const { username } = useContext(UserNameContext);
+  const authContext = useContext(AuthContext);
+  const username = authContext.authState.userInfo.username;
+  const isAuthenticated = authContext.isAuthenticated();
+  const logout = authContext.logout;
 
   function search(e) {
     e.preventDefault();
@@ -79,18 +84,19 @@ function Navbar() {
           </div>
         </form>
       </div>
-      {/* if log in then show */}
-      <div className="ml-auto md:m-0 hidden">
-        <button className="btn btn-sm md:btn-md btn-outline btn-info mx-2">
-          Sign Up
-        </button>
-        <button
-          className="btn btn-sm md:btn-md btn-info btn-active"
-          aria-pressed="true"
-        >
-          Log In
-        </button>
-      </div>
+      {!isAuthenticated && (
+        <div className="ml-auto md:m-0">
+          <button className="btn btn-sm md:btn-md btn-outline btn-info mx-2">
+            <Link to="/signup">Sign Up</Link>
+          </button>
+          <button
+            className="btn btn-sm md:btn-md btn-info btn-active"
+            aria-pressed="true"
+          >
+            <Link to="/signin">Log In</Link>
+          </button>
+        </div>
+      )}
 
       {/* Search btn for mobile */}
       <div className="ml-auto md:hidden">
@@ -105,49 +111,54 @@ function Navbar() {
       </div>
       {/* Search btn for mobile */}
 
-      <div className="dropdown dropdown-hover dropdown-end">
-        <div className="avatar z-20">
-          <div
-            className="rounded-full w-10 h-10 cursor-pointer 
+      {isAuthenticated && (
+        <div className="dropdown dropdown-hover dropdown-end">
+          <div className="avatar z-20">
+            <div
+              className="rounded-full w-10 h-10 cursor-pointer 
           ring ring-blue-500 ring-offset-base-100 ring-offset-2"
-          >
-            <img alt="avater" src="https://bit.ly/dan-abramov" />
-          </div>
-        </div>
-        <ul
-          tabIndex="0"
-          className="p-2 menu dropdown-content border 
-            border-gray-300 bg-base-100 rounded-lg w-48 shadow-lg"
-        >
-          <li>
-            <Link
-              to={`/profile/${username}`}
-              className="text-sm flex items-center"
             >
-              <MdAccountCircle size="22px" />
-              <p className="pl-2">Profile</p>
-            </Link>
-          </li>
-          <li>
-            <Link to="/bookmarked" className="text-sm flex items-center">
-              <HiBookmark size="22px" />
-              <p className="pl-2">Bookmark</p>
-            </Link>
-          </li>
-          <li>
-            <Link to="/newpost" className="text-sm flex items-center">
-              <VscNewFile size="22px" />
-              <p className="pl-2">New Post</p>
-            </Link>
-          </li>
-          <li>
-            <Link to="/logout" className="text-sm flex items-center">
-              <FaSignOutAlt size="20px" className="ml-1" />
-              <p className="pl-2">Log Out</p>
-            </Link>
-          </li>
-        </ul>
-      </div>
+              <img alt="avater" src="https://bit.ly/dan-abramov" />
+            </div>
+          </div>
+          <ul
+            tabIndex="0"
+            className="p-2 menu dropdown-content border 
+            border-gray-300 bg-base-100 rounded-lg w-48 shadow-lg"
+          >
+            <li>
+              <Link
+                to={`/profile/${username}`}
+                className="text-sm flex items-center"
+              >
+                <MdAccountCircle size="22px" />
+                <p className="pl-2">Profile</p>
+              </Link>
+            </li>
+            <li>
+              <Link to="/bookmarked" className="text-sm flex items-center">
+                <HiBookmark size="22px" />
+                <p className="pl-2">Bookmark</p>
+              </Link>
+            </li>
+            <li>
+              <Link to="/newpost" className="text-sm flex items-center">
+                <VscNewFile size="22px" />
+                <p className="pl-2">New Post</p>
+              </Link>
+            </li>
+            <li>
+              <button
+                className="text-sm flex items-center pl-5 py-3 rounded hover:bg-gray-800 hover:text-white"
+                onClick={logout}
+              >
+                <FaSignOutAlt size="20px" className="ml-1" />
+                <p className="pl-2">Log Out</p>
+              </button>
+            </li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 }

@@ -7,9 +7,10 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { useCreateJIPost } from '../hooks/useCreateJIPost';
 import { useCreateCoursePost } from '../hooks/useCreateCoursePost';
-import { UserContext } from '../App';
+// import { UserContext } from '../App';
 import { toast } from 'react-toastify';
 import { Rating } from './Rating';
+import { AuthContext } from '../Auth/AuthContext';
 
 function CreatePost() {
   const [editorState, setEditorState] = useState(EditorState.createEmpty());
@@ -19,7 +20,9 @@ function CreatePost() {
   const [title, setTitle] = useState();
   const [rating, setRating] = useState(null);
   const [link, setLink] = useState('');
-  const user = useContext(UserContext);
+  // const user = useContext(UserContext);
+  const authContext = useContext(AuthContext);
+  const userId = authContext.authState.userInfo.id;
   const { mutate: createJIPost, isLoading: jiLoading } = useCreateJIPost();
   const { mutate: createCoursePost, isLoading: courseLoading } =
     useCreateCoursePost();
@@ -37,7 +40,7 @@ function CreatePost() {
           title,
           description: convertToRaw(editorState.getCurrentContent()),
           rating: rating,
-          userId: user,
+          userId: userId,
           link,
         };
         console.log(formData);
@@ -49,7 +52,7 @@ function CreatePost() {
         const formData = {
           title,
           description: convertToRaw(editorState.getCurrentContent()),
-          userId: user,
+          userId: userId,
           link,
           startDate,
           endDate,

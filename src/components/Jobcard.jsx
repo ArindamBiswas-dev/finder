@@ -4,8 +4,9 @@ import { getFormatedDate } from '../util/getFormatedDate';
 import { Link } from 'react-router-dom';
 import { useAddToBookmark } from '../hooks/useAddToBookmark';
 import { useRemoveBookmark } from '../hooks/useRemoveBookmark';
-import { UserContext } from '../App';
+// import { UserContext } from '../App';
 import { useCheckIfBookmarkedJI } from '../hooks/useCheckIfBookmarkedJI';
+import { AuthContext } from '../Auth/AuthContext';
 
 function Jobcard({
   author,
@@ -13,7 +14,6 @@ function Jobcard({
   title,
   description,
   slug,
-  userId,
   startDate,
   endDate,
   jiId,
@@ -23,14 +23,18 @@ function Jobcard({
   const formatedPostDate = getFormatedDate(date);
 
   const [bookmarked, setbookmarked] = useState(false);
-  const user = useContext(UserContext);
-  useCheckIfBookmarkedJI(user, setbookmarked, jiId);
+  // const user = useContext(UserContext);
+  const authContext = useContext(AuthContext);
+  const userId = authContext.authState.userInfo.id;
+  const isAuthenticated = authContext.isAuthenticated();
+
+  useCheckIfBookmarkedJI(userId, setbookmarked, jiId);
   const { mutate: addBookmark } = useAddToBookmark();
   const { mutate: removeBookmark } = useRemoveBookmark();
 
   const addToBookmark = () => {
-    if (!user) return;
-    const h = { itemId: jiId, user: user, topic: 'ji' };
+    if (!userId) return;
+    const h = { itemId: jiId, user: userId, topic: 'ji' };
     if (!bookmarked) {
       console.log('add from bookmark');
       addBookmark(h);
@@ -65,7 +69,7 @@ function Jobcard({
                  : `border-gray-700 hover:border-gray-700`
              }`}
           onClick={addToBookmark}
-          disabled={!user ? true : false}
+          disabled={!isAuthenticated}
         >
           <BsFillBookmarksFill
             className={`${bookmarked ? `text-blue-500` : `text-gray-700`}`}
