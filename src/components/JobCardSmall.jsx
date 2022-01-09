@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { MdDelete } from 'react-icons/md';
 import { Link } from 'react-router-dom';
+import { AuthContext } from '../Auth/AuthContext';
 import { getFormatedDate } from '../util/getFormatedDate';
 
 export const JobCardSmall = ({
@@ -26,7 +27,7 @@ export const JobCardSmall = ({
         <div className="flex items-center">
           <div className="avatar">
             <div className="rounded-full w-10 h-10">
-              <img alt="course or job" src="https://bit.ly/dan-abramov" />
+              <img alt="course or job" src={avatar} />
             </div>
           </div>
           <div className="pl-5 text-gray-900">

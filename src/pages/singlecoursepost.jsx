@@ -109,7 +109,7 @@ function Singlecoursepost() {
               <Link to={`/profile/${data.data.username}`}>
                 <div className="avatar">
                   <div className="rounded-full w-12 h-12 md:w-16 md:h-16">
-                    <img alt="avater" src="https://bit.ly/dan-abramov" />
+                    <img alt="avater" src={data.data.avatar} />
                   </div>
                 </div>
               </Link>

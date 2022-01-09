@@ -19,7 +19,7 @@ function CourseCardSmall({
         <div className="flex items-center">
           <div className="avatar">
             <div className="rounded-full w-10 h-10">
-              <img alt="course or job" src="https://bit.ly/dan-abramov" />
+              <img alt="course or job" src={avatar} />
             </div>
           </div>
           <div className="pl-5 text-gray-900">

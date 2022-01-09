@@ -2,8 +2,9 @@ import { useMutation } from 'react-query';
 import { toast } from 'react-toastify';
 import { axiosInstance } from '../util/axiosInstance';
 
-const updateProfile = ({ name, username, bio }) => {
-  const formData = { name, username, bio };
+const updateProfile = ({ name, username, bio, avatar }) => {
+  const formData = { name, username, bio, avatar };
+  console.log(formData);
   return axiosInstance.post('/api/updateprofile', formData);
 };
 

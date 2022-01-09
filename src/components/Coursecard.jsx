@@ -8,7 +8,15 @@ import { useCheckIfBookmarkedCourse } from '../hooks/useCheckIfBookmarkedCourse'
 import { useRemoveBookmark } from '../hooks/useRemoveBookmark';
 import { getFormatedDate } from '../util/getFormatedDate';
 
-function Coursecard({ author, date, title, description, slug, courseId }) {
+function Coursecard({
+  author,
+  date,
+  title,
+  description,
+  slug,
+  courseId,
+  avatar,
+}) {
   const [bookmarked, setbookmarked] = useState(false);
   // const user = useContext(UserContext);
   const authContext = useContext(AuthContext);
@@ -51,7 +59,7 @@ function Coursecard({ author, date, title, description, slug, courseId }) {
       <div className="flex items-center">
         <div className="avatar">
           <div className="rounded-full w-10 h-10">
-            <img alt="course" src="https://bit.ly/dan-abramov" />
+            <img alt="course" src={avatar} />
           </div>
         </div>
 

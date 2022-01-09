@@ -104,7 +104,7 @@ export const Singljipost = () => {
               <Link to="/profile/@anupamdas35">
                 <div className="avatar">
                   <div className="rounded-full w-12 h-12 md:w-16 md:h-16">
-                    <img alt="avater" src="https://bit.ly/dan-abramov" />
+                    <img alt="avater" src={data.data.avatar} />
                   </div>
                 </div>
               </Link>

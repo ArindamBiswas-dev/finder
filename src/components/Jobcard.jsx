@@ -17,6 +17,7 @@ function Jobcard({
   startDate,
   endDate,
   jiId,
+  avatar,
 }) {
   const formatedStartDate = getFormatedDate(startDate);
   const formatedEndDate = getFormatedDate(endDate);
@@ -54,7 +55,7 @@ function Jobcard({
       <div className="flex items-center">
         <div className="avatar">
           <div className="rounded-full w-10 h-10">
-            <img alt="job" src="https://bit.ly/dan-abramov" />
+            <img alt="job" src={avatar} />
           </div>
         </div>
         <div className="pl-5">

@@ -23,6 +23,9 @@ function Profile() {
   const [name, setName] = useState('');
   const [username, setUserName] = useState('');
   const [bio, setBio] = useState('');
+  const [previewImage, setPreviewImage] = useState('');
+  const [fileInputState, setFileInputState] = useState('');
+  const [selectedFile, setSelectedFile] = useState();
   const {
     mutate: updateProfile,
     error: updateError,
@@ -52,9 +55,43 @@ function Profile() {
       toast.error('Username can not be empty');
       return;
     }
+
+    if (selectedFile) {
+      const reader = new FileReader();
+      reader.readAsDataURL(selectedFile);
+      reader.onloadend = () => {
+        console.log({ name, username, bio });
+        const formData = {
+          name,
+          username,
+          bio,
+          avatar: reader.result,
+        };
+        updateProfile(formData);
+      };
+      return;
+    }
+
     console.log({ name, username, bio });
-    const formData = { name, username, bio };
+    const formData = { name, username, bio, avatar: '' };
     updateProfile(formData);
+  };
+  const onClose = () => {
+    setPreviewImage('');
+    setFileInputState('');
+  };
+
+  const onHanleAvatarChange = (e) => {
+    const file = e.target.files[0];
+    setFileInputState(e.target.value);
+    setSelectedFile(file);
+    console.log(file);
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onloadend = () => {
+      setPreviewImage(reader.result);
+      console.log(reader.result);
+    };
   };
 
   return (
@@ -81,7 +118,7 @@ function Profile() {
                   className="rounded-full w-16 h-16 md:w-32 md:h-32 ring ring-info 
             ring-offset-base-100 ring-offset-2"
                 >
-                  <img alt="avater" src="https://bit.ly/dan-abramov" />
+                  <img alt="avater" src={data.data.avatar} />
                 </div>
               </div>
 
@@ -108,7 +145,7 @@ function Profile() {
                           className="rounded-full w-16 h-16 md:w-24 md:h-24 ring ring-info 
             ring-offset-base-100 ring-offset-2"
                         >
-                          <img alt="avater" src="https://bit.ly/dan-abramov" />
+                          <img alt="avater" src={data.data.avatar} />
                         </div>
                       </div>
                       <div className="mb-4 md:mb-6 h-10 text-sm">
@@ -118,6 +155,8 @@ function Profile() {
                             type="file"
                             id="file-input"
                             name="ImageStyle"
+                            value={fileInputState}
+                            onChange={onHanleAvatarChange}
                           />
                         </div>
                       </div>
@@ -177,7 +216,7 @@ function Profile() {
                       <button className="btn btn-info" onClick={onSave}>
                         Save
                       </button>
-                      <a href="#close" class="btn">
+                      <a href="#close" class="btn" onClick={onClose}>
                         Close
                       </a>
                     </div>

@@ -16,6 +16,7 @@ function Navbar() {
   // const { username } = useContext(UserNameContext);
   const authContext = useContext(AuthContext);
   const username = authContext.authState.userInfo.username;
+  const avatar = authContext.authState.userInfo.avatar;
   const isAuthenticated = authContext.isAuthenticated();
   const logout = authContext.logout;
 
@@ -118,7 +119,7 @@ function Navbar() {
               className="rounded-full w-10 h-10 cursor-pointer 
           ring ring-blue-500 ring-offset-base-100 ring-offset-2"
             >
-              <img alt="avater" src="https://bit.ly/dan-abramov" />
+              <img alt="avater" src={avatar} />
             </div>
           </div>
           <ul
