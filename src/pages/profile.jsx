@@ -73,7 +73,7 @@ function Profile() {
     }
 
     console.log({ name, username, bio });
-    const formData = { name, username, bio, avatar: '' };
+    const formData = { name, username, bio, avatar: data.data.avatar };
     updateProfile(formData);
   };
   const onClose = () => {
@@ -145,7 +145,10 @@ function Profile() {
                           className="rounded-full w-16 h-16 md:w-24 md:h-24 ring ring-info 
             ring-offset-base-100 ring-offset-2"
                         >
-                          <img alt="avater" src={data.data.avatar} />
+                          <img
+                            alt="avater"
+                            src={previewImage ? previewImage : data.data.avatar}
+                          />
                         </div>
                       </div>
                       <div className="mb-4 md:mb-6 h-10 text-sm">
